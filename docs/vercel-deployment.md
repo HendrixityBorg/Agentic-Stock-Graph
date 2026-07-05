@@ -62,6 +62,12 @@ https://<project-name>.vercel.app/demo/
 
 Then test `/demo/` with one of the built-in news samples.
 
+Current public deployment:
+
+```text
+https://agentic-stock-graph-eight.vercel.app/demo/
+```
+
 ## 5. Troubleshooting
 
 - If `/health` returns `arkApiConfigured: false`, check `ARK_API_KEY` in Vercel environment variables and redeploy.

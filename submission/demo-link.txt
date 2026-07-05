@@ -1,0 +1,7 @@
+Public demo:
+https://agentic-stock-graph-eight.vercel.app/demo/
+
+Health check:
+https://agentic-stock-graph-eight.vercel.app/health
+
+No login required.

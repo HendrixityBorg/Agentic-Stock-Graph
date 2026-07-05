@@ -191,6 +191,24 @@ auth：Authorization: Bearer $ARK_API_KEY
 
 ## 7. 产品运行方式、访问方式或演示方式
 
+公网 demo：
+
+```text
+https://agentic-stock-graph-eight.vercel.app/demo/
+```
+
+健康检查：
+
+```text
+https://agentic-stock-graph-eight.vercel.app/health
+```
+
+源码仓库：
+
+```text
+https://github.com/HendrixityBorg/Agentic-Stock-Graph
+```
+
 当前本地运行方式：
 
 ```text
@@ -221,12 +239,20 @@ ARK_API_KEY=... PORT=5176 node server.mjs
 http://localhost:5176/demo/
 ```
 
+Vercel 公网部署使用：
+
+```text
+public/demo/              静态前端页面
+api/analyze-news.mjs      新闻分析与 Ark 模型调用接口
+api/health.mjs            部署健康检查接口
+```
+
 提交阶段建议提供：
 
 ```text
-公网 demo 链接
-录屏 demo 链接
-产品说明文档 PDF
+公网 demo 链接：已提供
+录屏 demo 链接：建议作为兜底材料补充
+产品说明文档：当前为 Markdown，可按需要导出 PDF
 补充设计文档 docs/stock-market-graph-design.md
 Demo 可行性与提交计划 docs/demo-feasibility-and-submission-plan.md
 ```
@@ -276,9 +302,9 @@ Demo 可行性与提交计划 docs/demo-feasibility-and-submission-plan.md
 1. 将第一版 Real Model Mode 拆成更完整的多 agent workflow。
 2. 完善 agent JSON schema、fallback、输出校验和异常恢复。
 3. 补充更多 demo 事件和股票池。
-4. 部署公网 demo。
-5. 录制演示视频。
-6. 导出最终产品说明文档 PDF。
+4. 录制演示视频，作为公网 demo 的兜底展示材料。
+5. 导出最终产品说明文档 PDF（如提交平台偏好 PDF）。
+6. 补充产品截图，帮助评委快速理解界面。
 ```
 
 ## 10. 风险提示、局限性与未来改进方向
