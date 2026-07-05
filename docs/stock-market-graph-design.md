@@ -547,7 +547,7 @@ Company
  -> Structured Products / Warrants
 ```
 
-Market Graph 关注的是资金如何通过不同资产表达同一主题或同一公司变化。
+Market Graph 关注的是资金如何通过不同资产表达同一主题、同一公司变化，以及市场如何形成和修正预期。
 
 例如：
 
@@ -574,12 +574,62 @@ valuation_multiple
 fund_flow
 crowding
 factor_exposure
+consensus_expectation
+earnings_revision
+implied_volatility
+option_skew
+price_momentum
+volume_shock
+relative_strength
+positioning_proxy
+priced_in_level
 ```
 
 它与 Operating Graph 的区别在于：
 
 - Operating Graph 解释真实经营和利润传导。
 - Market Graph 解释资金流、估值、风险偏好和市场结构传导。
+
+市场预期层不一定需要成为第四张独立图。更合理的方式是把它作为 Market Graph 内部的 expectation / positioning / liquidity / valuation 指标组：
+
+```text
+Financial Asset Subgraph
+ -> expectation indicators
+ -> positioning indicators
+ -> liquidity indicators
+ -> valuation indicators
+ -> derivatives indicators
+ -> flow indicators
+```
+
+这样可以避免系统层级过多，同时保留现实市场中非常关键的“预期差”机制。
+
+例如同样是云厂商上调 AI capex：
+
+```text
+Operating Graph:
+AI capex 上调 -> GPU / HBM / 光模块 / 电力设备需求上升
+
+Market Graph:
+市场是否已经充分 price in？
+分析师是否上修盈利预期？
+期权 IV 和 skew 是否显示拥挤交易？
+ETF / theme fund 是否出现资金流入？
+估值是否已经透支未来增长？
+```
+
+因此，Market Graph 不只维护“股票、ETF、期权、债券”这些金融资产节点，也应维护围绕这些资产的指标节点或属性。推荐系统在输出时应区分：
+
+```text
+fundamental flow improving
+market expectation improving
+positioning crowded
+valuation stretched
+liquidity supportive
+derivatives signal overheated
+```
+
+这能让系统解释为什么某个公司基本面变好，但股票不一定还能继续上涨；也能解释为什么某些没有直接经营受益的资产，会因为资金流、ETF、期权或主题交易而短期受益。
 
 ## 6. Macro Indicator Graph 设计
 
@@ -1979,4 +2029,28 @@ ETF 持仓
 
 9. 学习型传播模型
    在积累足够历史事件和验证样本后，引入 temporal graph model、graph embedding 或 GNN。
+
+10. Market Graph 预期与仓位指标增强
+   不单独新增“市场预期图”，而是在 Market Graph / Financial Asset Subgraph 中强化 expectation、positioning、liquidity、valuation、derivatives 和 fund flow 指标。可接入分析师一致预期、盈利修正、成交量异动、ETF 资金流、期权 IV / skew、short interest、估值分位、动量和相对强弱等信号，用于判断新闻是否已经 price in、交易是否拥挤、市场是否可能出现二次重估。
+
+11. Edge 语义细化
+   将边从简单的 positive / negative / mixed 扩展为收入传导边、成本传导边、产能约束边、替代竞争边、客户/供应商集中度边、估值折现率边、风险偏好边、政策限制边、ETF / 资金流边等。每条边可增加 condition、lag_distribution、threshold、convexity、decay、evidence、priced_in_level 等字段，使传播更接近真实市场。
+
+12. Company Economic Twin 深化
+   将 Company Tree 从展示型结构升级为轻量公司经济体模型，维护产品/业务线、地区收入、客户结构、供应商结构、成本结构、毛利敏感项、capex、折旧、库存、产能、现金流、负债和管理层 guidance。Company Agent 接收外部 shock 后，先判断其影响收入、成本、毛利、capex、现金流、融资还是估值，再生成 scenario overlay 和 edge proposal。
+
+13. 时间维度与事件生命周期
+   为事件、节点状态和边关系增加时间轴，包括事件发生时间、披露时间、市场反应窗口、业务兑现窗口、财报确认窗口、边权衰减和证据更新。不同边应有不同 lag，例如监管边可能当天影响估值，供应链收入边可能需要 1-3 个季度验证。
+
+14. Macro Regime 识别
+   Macro Graph 不只维护单个宏观指标，还需要识别宏观状态或 regime，例如降息周期、高通胀周期、信用收缩、美元走强、商品上行、风险偏好修复、流动性压力等。同一个 CPI 或利率变化，在不同 regime 下对成长股、银行、能源、消费和新兴市场资产的影响可能不同。
+
+15. 验证、回测与边权校准
+   建立 event study 和 post-mortem 机制，追踪推荐后的 1/5/20/60 日市场表现、后续订单/收入/指引验证、分析师预期修正和实际财报兑现。系统需要判断错误来自新闻理解、边关系、时间窗口、市场已 price in，还是组合层风险约束，并据此更新 edge weight 和 confidence。
+
+16. Portfolio Agent 风险预算
+   从“标的推荐”进一步扩展到“组合推荐”，加入仓位大小、相关性、行业暴露、主题拥挤度、波动率、最大回撤、流动性、换手成本、风险预算和对冲工具。输出不只是 add / monitor / reduce，也可以是 rebalance、trim、pair trade、hedge 或 keep watch only。
+
+17. 与量化 Agent / 指标 Agent 协作
+   引入专门的 Quant Agent、Factor Agent、Technical Indicator Agent、Valuation Agent、Risk Agent 和 Data Quality Agent。LLM/Company Agent 负责理解事件、生成假设和解释路径；量化与指标 agent 负责计算估值分位、动量、波动率、资金流、盈利修正、因子暴露、相关性和异常检测，最终由 Portfolio Agent 汇总成更全面的推荐。
 ```
