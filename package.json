@@ -1,0 +1,13 @@
+{
+  "name": "marketflow-graph-demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "check": "node --check server.mjs && node --check demo/app.js && node --check tools/ark-smoke-test.mjs && node --check tools/ark-agent-extraction-test.mjs"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}
