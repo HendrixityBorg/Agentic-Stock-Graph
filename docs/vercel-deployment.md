@@ -1,6 +1,6 @@
 # Vercel Deployment Guide
 
-This demo should be deployed as a Node.js server because `/api/analyze-news` calls Ark from the backend.
+This demo is deployed on Vercel with static files in `public/demo/` and serverless API routes in `api/`.
 
 ## 1. Repository
 
@@ -10,6 +10,8 @@ Push this project root to GitHub. The root should contain:
 - `package.json`
 - `vercel.json`
 - `demo/`
+- `public/demo/`
+- `api/`
 - `docs/`
 
 Do not commit API keys.
@@ -24,7 +26,7 @@ In Vercel:
 4. Keep Root Directory as the repository root.
 5. Leave Build Command and Output Directory empty unless Vercel asks for a value.
 
-Vercel detects `server.mjs` in the project root and captures `server.listen()` as a Node.js Function. Do not add a `functions.server.mjs` rule in `vercel.json`; Vercel's `functions` patterns are for functions inside the `/api` directory and will fail with a pattern-mismatch error.
+Vercel serves the demo page from `public/demo/` and runs `api/analyze-news.mjs` as the model backend. `server.mjs` remains the local development server.
 
 ## 3. Environment Variables
 
@@ -63,7 +65,7 @@ Then test `/demo/` with one of the built-in news samples.
 ## 5. Troubleshooting
 
 - If `/health` returns `arkApiConfigured: false`, check `ARK_API_KEY` in Vercel environment variables and redeploy.
-- If `/demo/` returns 404, confirm `server.mjs` is in the repository root.
-- If deploy fails with `The pattern "server.mjs" defined in functions doesn't match any Serverless Functions inside the api directory`, remove the `functions` block from `vercel.json` and redeploy.
+- If `/demo/` returns 404, confirm `public/demo/index.html` exists in the repository.
+- If `/api/analyze-news` returns 404, confirm `api/analyze-news.mjs` exists in the repository.
 - If analysis times out, retry with pasted article text. Some publishers block server-side article fetching.
 - If a news site cannot be fetched, the demo can still run from the pasted excerpt field.

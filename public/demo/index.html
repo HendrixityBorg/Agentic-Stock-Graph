@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>股票市场动态图谱推荐 Demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Agent-Assisted Graph Evolution Demo</p>
+        <h1>股票市场动态图谱推荐 Demo</h1>
+        <p class="header-copy">
+          输入用户组合与外部事件，展示 agent 如何消化信息、更新图谱、传播 money flow，并输出组合动作。
+        </p>
+      </div>
+      <div class="header-status">
+        <span>Frozen dataset</span>
+        <span>Real model agent</span>
+        <span>Not investment advice</span>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <section class="input-panel" aria-label="输入面板">
+        <div class="panel-heading">
+          <p class="section-kicker">Input</p>
+          <h2>Portfolio + Event</h2>
+        </div>
+
+        <label class="field">
+          <span>Preset portfolio</span>
+          <select id="portfolioPreset"></select>
+        </label>
+
+        <div class="field">
+          <span>Portfolio holdings</span>
+          <div id="holdingRows" class="holding-rows"></div>
+          <button id="addHoldingButton" class="secondary-button" type="button">
+            Add holding
+          </button>
+        </div>
+
+        <label class="field">
+          <span>News URL</span>
+          <input id="newsUrlInput" class="text-input" placeholder="https://example.com/news/..." spellcheck="false" />
+        </label>
+
+        <label class="field">
+          <span>Optional pasted excerpt</span>
+          <textarea id="eventInput" spellcheck="false"></textarea>
+        </label>
+
+        <div class="field">
+          <span>Demo news samples</span>
+          <div id="newsSampleList" class="news-sample-list"></div>
+        </div>
+
+        <button id="analyzeButton" class="primary-button" type="button">
+          Analyze propagation
+        </button>
+
+        <div id="analysisStatus" class="analysis-status" aria-live="polite"></div>
+
+        <div class="input-note">
+          当前 demo 默认使用 Real model，通过本地 Node server 调用 Ark。若模型或新闻抓取失败，页面会自动回退到 frozen graph seed。
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="分析结果">
+        <section class="summary-grid" id="summaryGrid"></section>
+
+        <section class="work-section">
+          <div class="section-header">
+            <div>
+              <p class="section-kicker">Node / Edge Inventory</p>
+              <h2>图谱资产盘点</h2>
+            </div>
+            <span class="timestamp">canonical + active graph</span>
+          </div>
+          <div id="inventoryPanel" class="inventory-panel"></div>
+        </section>
+
+        <section class="work-section">
+          <div class="section-header">
+            <div>
+              <p class="section-kicker">News URL Extraction</p>
+              <h2>新闻信息抽取预览</h2>
+            </div>
+            <span class="timestamp">model extraction</span>
+          </div>
+          <div id="extractionPreview" class="extraction-preview"></div>
+        </section>
+
+        <section class="work-section">
+          <div class="section-header">
+            <div>
+              <p class="section-kicker">Graph Mutation</p>
+              <h2>Before / After 图谱演进</h2>
+            </div>
+            <span class="timestamp">edge lifecycle</span>
+          </div>
+          <div id="mutationPanel" class="mutation-panel"></div>
+        </section>
+
+        <section class="work-section">
+          <div class="section-header">
+            <div>
+              <p class="section-kicker">Company Agent Sandbox</p>
+              <h2>公司经济体架空推演</h2>
+            </div>
+            <span class="timestamp">inference / scenario overlay</span>
+          </div>
+          <div id="companyAgentPanel" class="company-agent-panel"></div>
+        </section>
+
+        <section class="work-section">
+          <div class="section-header">
+            <div>
+              <p class="section-kicker">Graph Snapshot</p>
+              <h2>三层异质图谱状态</h2>
+            </div>
+            <span class="timestamp">typed directed graph</span>
+          </div>
+          <div class="graph-overview">
+            <div id="graphLayerList" class="graph-layer-list"></div>
+            <div>
+              <h3>Active edge signals</h3>
+              <div id="edgeSignalList" class="edge-signal-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="work-section">
+          <div class="section-header">
+            <div>
+              <p class="section-kicker">Propagation</p>
+              <h2>传导路径可视化</h2>
+            </div>
+            <div class="legend">
+              <span><i class="dot positive"></i>正向</span>
+              <span><i class="dot negative"></i>负向</span>
+              <span><i class="dot mixed"></i>混合</span>
+              <span><i class="dot market"></i>市场资金</span>
+            </div>
+          </div>
+          <div class="network-shell">
+            <div id="networkGraph" class="network-graph" aria-label="传播网络图"></div>
+          </div>
+          <div id="pathBoard" class="path-board"></div>
+        </section>
+
+        <section class="work-section">
+          <div class="section-header">
+            <div>
+              <p class="section-kicker">Portfolio Output</p>
+              <h2>组合影响与推荐动作</h2>
+            </div>
+            <span id="analysisTimestamp" class="timestamp"></span>
+          </div>
+          <div class="output-grid">
+            <div>
+              <h3>Existing portfolio impact</h3>
+              <div id="portfolioImpact" class="impact-list"></div>
+            </div>
+            <div>
+              <h3>Add / monitor / reduce</h3>
+              <div id="recommendationList" class="recommendation-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="work-section">
+          <div class="section-header">
+            <div>
+              <p class="section-kicker">Company Tree</p>
+              <h2>公司经济体快照</h2>
+            </div>
+            <span class="timestamp">Frozen graph seed</span>
+          </div>
+          <div id="companyTreeList" class="company-tree-list"></div>
+        </section>
+      </section>
+
+      <aside class="detail-panel" aria-label="Agent trace">
+        <div class="panel-heading">
+          <p class="section-kicker">Agent Trace</p>
+          <h2>AI 处理过程</h2>
+        </div>
+
+        <div id="agentTrace" class="trace-list"></div>
+
+        <div class="panel-heading evidence-heading">
+          <p class="section-kicker">Evidence</p>
+          <h2>证据与验证信号</h2>
+        </div>
+        <div id="evidenceList" class="evidence-list"></div>
+      </aside>
+    </main>
+
+    <footer class="app-footer">
+      Demo 使用公开数据源思路和人工整理的 frozen graph seed。输出用于展示产品逻辑，不构成投资建议。
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

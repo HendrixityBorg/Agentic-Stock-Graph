@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.mjs",
-    "check": "node --check server.mjs && node --check demo/app.js && node --check tools/ark-smoke-test.mjs && node --check tools/ark-agent-extraction-test.mjs"
+    "check": "node --check server.mjs && node --check demo/app.js && node --check public/demo/app.js && node --check api/analyze-news.mjs && node --check api/health.mjs && node --check tools/ark-smoke-test.mjs && node --check tools/ark-agent-extraction-test.mjs"
   },
   "engines": {
     "node": "22.x"
