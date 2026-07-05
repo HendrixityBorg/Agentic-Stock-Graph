@@ -2,11 +2,13 @@
 
 ## 1. 项目名称
 
-MarketFlow Graph：股票市场动态图谱与 Agent 推荐 Demo
+MarketFlow：金融资产 Agentic Graph Demo
 
 ## 2. 项目简介
 
-MarketFlow Graph 是一个面向港美股研究场景的动态图谱推荐系统 demo。它以用户已有 portfolio 和外部事件为输入，通过 agent 解析新闻、财报、宏观变化或产品事件，并将这些信息转化为图谱节点和边的变化，再沿 Operating Graph、Market Graph 和 Macro Indicator Graph 传播影响，最终输出组合影响、关注名单、可买候选、减配/退出提示、对冲建议和解释路径。
+MarketFlow 是一个面向全球股票研究场景的动态推荐系统。它会从用户的porfolio出发，沿着用户的注意力进行动态资产推荐。MarketFlow 以全球资金流动为线索连接公司，构建公司存续模拟节点，通过 agent 将新闻、财报、宏观经济指数、跨市场金融工具等信息转化成资金脉络，再探索信息传播影响，最终输出组合影响、关注名单、可买候选、减配/退出提示、对冲建议和解释路径。
+
+简单来说就是以钱的流向为脉络将所有上市公司以及其股票背后的衍生金融产品连接成graph，通过资金流动行为判断潜在标的。
 
 本 demo 的目标不是给出生产级交易信号，而是展示一个可解释的投研辅助闭环：
 
@@ -270,42 +272,7 @@ Demo 可行性与提交计划 docs/demo-feasibility-and-submission-plan.md
 
 ## 9. 当前完成度
 
-已完成：
-
-```text
-1. 初步系统设计文档
-2. Demo 可行性与提交计划文档
-3. 静态单页 demo
-4. Frozen demo data
-5. Mock agent trace
-6. 传导路径可视化
-7. Portfolio impact 与 recommendation output
-8. Graph Snapshot 与 active edge signal 展示
-9. News URL Extraction Preview
-10. Before / After Graph Mutation
-11. 网络图形式的传播路径可视化
-12. Ark API smoke test 脚本与接入说明
-13. 本地 Node 后端 `server.mjs`
-14. Real Model Mode UI
-15. `POST /api/analyze-news` 端到端链路
-16. 使用近期 AP 新闻链接完成真实模型验证
-17. 将正式页面入口改为默认 Real Model，隐藏 Mock Mode，仅保留失败 fallback
-18. 将 graph seed 扩展到 35 个公司传播节点，覆盖半导体、云平台、电力、金融、零售、住房、能源和中国云 AI 路径
-19. 增加 Company Agent Sandbox，展示公司经济体层面的 inference / scenario 推演
-20. 增加 Node / Edge Inventory，展示 seed graph 与 active graph 统计
-21. 增加三条 demo news samples，支持稳定录屏和现场展示
-```
-
-待完成：
-
-```text
-1. 将第一版 Real Model Mode 拆成更完整的多 agent workflow。
-2. 完善 agent JSON schema、fallback、输出校验和异常恢复。
-3. 补充更多 demo 事件和股票池。
-4. 录制演示视频，作为公网 demo 的兜底展示材料。
-5. 导出最终产品说明文档 PDF（如提交平台偏好 PDF）。
-6. 补充产品截图，帮助评委快速理解界面。
-```
+只构建了少数资产以及部分金融衍生品间的网络；企业节点模型现在只使用了简化版本，后续应该使用agent主导的主动生存模拟
 
 ## 10. 风险提示、局限性与未来改进方向
 
